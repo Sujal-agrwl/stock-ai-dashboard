@@ -1,4 +1,3 @@
-# app.py
 import streamlit as st
 import pandas as pd
 from fii_dii_tracker import get_fii_dii_data
@@ -10,7 +9,7 @@ from news_fetcher import get_general_news
 st.set_page_config(page_title="📊 Stock AI Dashboard", layout="wide")
 st.title("📈 Stock Market AI Dashboard")
 
-# --- Section: FII/DII Tracker ---
+# --- FII/DII Tracker ---
 st.header("📉 FII/DII Tracker")
 fii_dii_df = get_fii_dii_data()
 if fii_dii_df.empty:
@@ -19,7 +18,7 @@ else:
     st.success(f"✅ FII/DII Data for: {fii_dii_df.iloc[0]['Date']}")
     st.dataframe(fii_dii_df)
 
-# --- Section: Quarterly Results ---
+# --- Quarterly Results ---
 st.header("📋 Quarterly Earnings Results")
 results_df = get_results_data()
 if results_df.empty:
@@ -27,7 +26,7 @@ if results_df.empty:
 else:
     st.dataframe(results_df)
 
-# --- Section: Bulk/Block Deals ---
+# --- Block & Bulk Deals ---
 st.header("💼 Bulk & Block Deals")
 deals_df = get_block_deals()
 if deals_df.empty:
@@ -35,7 +34,7 @@ if deals_df.empty:
 else:
     st.dataframe(deals_df)
 
-# --- Section: Government & Finance News ---
+# --- Government & Finance Policy News ---
 st.header("📰 Government & Finance Policy News")
 gov_df = get_gov_news()
 if gov_df.empty:
@@ -46,7 +45,7 @@ else:
         st.markdown(f"[Read more]({row['link']})")
         st.divider()
 
-# --- Section: General Business News ---
+# --- General Business News ---
 st.header("🧠 Global & Domestic Market News")
 news_df = get_general_news()
 if news_df.empty:
