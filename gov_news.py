@@ -9,8 +9,9 @@ newsapi = NewsApiClient(api_key='706e8dcdca9b41f7a3200fb62e12c788706e8dcdca9b41f
 
 def get_gov_news():
     try:
-        query = "RBI OR SEBI OR Ministry of Finance OR India economy OR policy"
-
+        query = (
+            "RBI OR SEBI OR Ministry of Finance OR India economy OR policy"
+        )
 
         response = newsapi.get_everything(
             q=query,
@@ -62,4 +63,5 @@ def scrape_fallback_news():
 
     except Exception:
         return pd.DataFrame([])
+
 
