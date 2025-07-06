@@ -1,4 +1,3 @@
-# news_fetcher.py
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
@@ -26,7 +25,6 @@ def get_general_news():
                 })
 
         return pd.DataFrame(data)
-
     except Exception:
         return pd.DataFrame([])
 
