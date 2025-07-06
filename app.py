@@ -1,10 +1,11 @@
-# app.py
+# stock_ai_dashboard/app.py
 import streamlit as st
 import pandas as pd
 from fii_dii_tracker import get_fii_dii_data
 from news_fetcher import get_news_data
 from earnings_result import get_results_data
 from block_deals import get_block_deals
+import datetime
 
 st.set_page_config(page_title="Stock AI Dashboard", layout="wide")
 st.title("📊 Stock AI Dashboard – India")
@@ -33,8 +34,15 @@ else:
 # --- Earnings Results ---
 st.header("📈 Quarterly Results")
 results_df = get_results_data()
+
+# Weekend fallback logic
+is_weekend = datetime.datetime.today().weekday() >= 5
+
 if results_df.empty:
-    st.warning("No result data fetched.")
+    if is_weekend:
+        st.info("Markets are closed today (Weekend/Holiday). Quarterly results usually update on working days.")
+    else:
+        st.warning("No result data fetched. May be due to delay in data availability.")
 else:
     st.dataframe(results_df)
 
