@@ -57,3 +57,15 @@ else:
 st.markdown("---")
 st.caption("Built by Sujal with ChatGPT 💡")
 
+from gov_news import get_gov_news
+
+# --- Government & Finance Policy News ---
+st.header("📰 Government & Finance Policy News")
+gov_df = get_gov_news()
+if gov_df.empty:
+    st.info("No recent government or finance policy news found.")
+else:
+    for _, row in gov_df.iterrows():
+        st.markdown(f"**{row['title']}**  \n*{row['source']}*  \n{row['description']}")
+        st.markdown(f"[Read more]({row['link']})")
+        st.divider()
