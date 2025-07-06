@@ -7,20 +7,19 @@ newsapi = NewsApiClient(api_key='706e8dcdca9b41f7a3200fb62e12c788706e8dcdca9b41f
 
 def get_gov_news():
     try:
-        response = newsapi.get_everything(
-    q= (
-    "India finance OR RBI OR SEBI OR Ministry of Finance OR budget OR "
-    "tax OR repo rate OR monetary policy OR interest rate OR inflation OR "
-    "GDP OR CPI OR IIP OR WPI OR fiscal deficit OR FII OR rupee OR dollar OR "
-    "oil prices OR China OR global slowdown OR US Fed OR subsidy OR PLI OR "
-    "NPA OR IPO OR insider trading OR economic policy"
-)
-,
-    language="en",
-    sort_by="publishedAt",
-    page_size=10
-)
+        query = (
+            "India finance OR RBI OR SEBI OR Ministry of Finance OR budget OR tax OR repo rate OR "
+            "monetary policy OR interest rate OR inflation OR GDP OR CPI OR IIP OR WPI OR fiscal deficit OR "
+            "FII OR rupee OR dollar OR oil prices OR China OR global slowdown OR US Fed OR subsidy OR "
+            "PLI OR NPA OR IPO OR insider trading OR economic policy"
+        )
 
+        response = newsapi.get_everything(
+            q=query,
+            language="en",
+            sort_by="publishedAt",
+            page_size=10
+        )
 
         articles = response.get("articles", [])
         if not articles:
