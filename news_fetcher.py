@@ -8,7 +8,7 @@ newsapi = NewsApiClient(api_key='706e8dcdca9b41f7a3200fb62e12c788706e8dcdca9b41f
 def get_general_news():
     try:
         response = newsapi.get_everything(
-            q = "Nifty OR Sensex OR Indian stock market OR India economy",
+            q="Nifty OR Sensex OR Indian stock market OR India economy",
             language="en",
             sort_by="publishedAt",
             page_size=10
@@ -31,3 +31,4 @@ def get_general_news():
 
     except Exception:
         return pd.DataFrame([])
+
