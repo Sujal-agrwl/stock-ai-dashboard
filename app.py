@@ -1,61 +1,31 @@
 import streamlit as st
 import pandas as pd
-from fii_dii_tracker import get_fii_dii_data
-from earnings_result import get_results_data
-from block_deals import get_block_deals
-from gov_news import get_gov_news
 from news_fetcher import get_general_news
+from gov_news import get_gov_news
+from news_insights import analyze_headlines
 
 st.set_page_config(page_title="📊 Stock AI Dashboard", layout="wide")
-st.title("📈 Stock Market AI Dashboard")
+st.title("🧠 Stock AI News Impact Dashboard")
 
-# --- FII/DII Tracker ---
-st.header("📉 FII/DII Tracker")
-fii_dii_df = get_fii_dii_data()
-if fii_dii_df.empty:
-    st.warning("❌ No data fetched.")
-else:
-    st.success(f"✅ FII/DII Data for: {fii_dii_df.iloc[0]['Date']}")
-    st.dataframe(fii_dii_df)
-
-# --- Quarterly Results ---
-st.header("📋 Quarterly Earnings Results")
-results_df = get_results_data()
-if results_df.empty:
-    st.info("Markets are closed today (Weekend/Holiday). Quarterly results usually update on working days.")
-else:
-    st.dataframe(results_df)
-
-# --- Block & Bulk Deals ---
-st.header("💼 Bulk & Block Deals")
-deals_df = get_block_deals()
-if deals_df.empty:
-    st.warning("No block or bulk deals found today.")
-else:
-    st.dataframe(deals_df)
-
-# --- Government & Finance Policy News ---
+# Government News
 st.header("📰 Government & Finance Policy News")
-gov_df = get_gov_news()
-if gov_df.empty:
+gov_news_df = get_gov_news()
+if not gov_news_df.empty:
+    st.dataframe(gov_news_df[["title", "source", "link"]])
+    st.subheader("📌 News Impact Insights (Gov News)")
+    gov_insights = analyze_headlines(gov_news_df["title"].tolist())
+    st.dataframe(gov_insights)
+else:
     st.info("No recent government or finance policy news found.")
-else:
-    for _, row in gov_df.iterrows():
-        st.markdown(f"**{row['title']}**  \n*{row['source']}*  \n{row['description']}")
-        st.markdown(f"[Read more]({row['link']})")
-        st.divider()
 
-# --- General Business News ---
-st.header("🧠 Global & Domestic Market News")
-news_df = get_general_news()
-if news_df.empty:
+# Business News
+st.header("📈 Global & Domestic Market News")
+gen_news_df = get_general_news()
+if not gen_news_df.empty:
+    st.dataframe(gen_news_df[["title", "source", "link"]])
+    st.subheader("📌 News Impact Insights (General News)")
+    gen_insights = analyze_headlines(gen_news_df["title"].tolist())
+    st.dataframe(gen_insights)
+else:
     st.info("No business news found.")
-else:
-    for _, row in news_df.iterrows():
-        st.markdown(f"**{row['title']}**  \n*{row['source']}*  \n{row['description']}")
-        st.markdown(f"[Read more]({row['link']})")
-        st.divider()
-
-st.markdown("---")
-st.caption("Made by Sujal Agrawal • Powered by Streamlit & AI")
 
