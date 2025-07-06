@@ -1,31 +1,29 @@
 # news_fetcher.py
 import pandas as pd
-from newsapi import NewsApiClient
-
-# Initialize with your NewsAPI key
-newsapi = NewsApiClient(api_key='706e8dcdca9b41f7a3200fb62e12c788706e8dcdca9b41f7a3200fb62e12c788')
+import requests
+from bs4 import BeautifulSoup
 
 def get_general_news():
     try:
-        response = newsapi.get_everything(
-            q="Nifty OR Sensex OR Indian stock market OR India economy",
-            language="en",
-            sort_by="publishedAt",
-            page_size=10
-        )
+        url = "https://economictimes.indiatimes.com/markets"
+        headers = {"User-Agent": "Mozilla/5.0"}
+        response = requests.get(url, headers=headers, timeout=10)
+        soup = BeautifulSoup(response.text, "html.parser")
 
-        articles = response.get("articles", [])
-        if not articles:
-            return pd.DataFrame([])
-
+        news_cards = soup.select(".eachStory")
         data = []
-        for article in articles:
-            data.append({
-                "title": article.get("title"),
-                "source": article.get("source", {}).get("name"),
-                "description": article.get("description"),
-                "link": article.get("url")
-            })
+
+        for card in news_cards[:10]:
+            title = card.select_one("h3 a")
+            desc = card.select_one(".synopsis")
+            link = title.get("href", "") if title else ""
+            if title and link:
+                data.append({
+                    "title": title.text.strip(),
+                    "source": "ET Markets",
+                    "description": desc.text.strip() if desc else "",
+                    "link": "https://economictimes.indiatimes.com" + link if link.startswith("/") else link
+                })
 
         return pd.DataFrame(data)
 
